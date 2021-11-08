@@ -1,3 +1,4 @@
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -8,7 +9,8 @@ from social.forms import SocialCommentForm, ShareForm
 from .models import SocialPost, SocialComment
 from django.views.generic.edit import UpdateView, DeleteView
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, query
+from accounts.models import Profile
 
 
 # Create your views here.
@@ -251,8 +253,12 @@ class CommentEditView(UpdateView):
         return reverse_lazy('social:post-detail', kwargs={'pk':pk})
 
 class UserSerch(View):
-    def get(reselt, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('query')
+        profile_list = Profile.objects.filter(Q(user__username__icontains = query))
+
         context={
-            
+            'profile_list':profile_list
+
         }
         return render(request, 'pages/social/search.html', context)

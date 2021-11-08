@@ -5,7 +5,7 @@
 
 {% load humanize %}
 
-{% block title %} {{user.username}} Deatil{% endblock title %}
+{% block title %}  Deatil{% endblock title %}
 {% block extra_head %}{% endblock extra_head %}
 
 <!-- NAVBAR -->
@@ -22,6 +22,34 @@
 <!-- main content -->
 {% block content %}
 
+{% for profile in profile_list  %}
+
+
+{% if profile.picture %}
+
+<div>
+    <ul class="flex w-full lg:w-max items-center justify-center">
+        <li class="w-1/5 md:w-max text-center">
+            <a href="{% url 'users:profile' username=profile.user.username %}" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block text-blue-500 border-b-4 border-blue-500">
+                <img src="{{profile.picture.url}}" alt="profile">
+
+            </a>
+        </li>
+    {% else %}   
+        <li class="w-1/5 md:w-max text-center">
+            <a href="{% url 'users:profile' username=profile.user.username %}" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block text-blue-500 border-b-4 border-blue-500">
+                <img src="{% static 'user_default_profile.png' %}" alt="profile">
+            </a>
+        </li>
+
+    </ul>
+
+    {% endif %}
+
+    <h1>{{profile.user.username}} </h1>
+    {% endfor %}
+    
+</div>
 
 
 {% endblock content %}
